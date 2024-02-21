@@ -15,17 +15,23 @@ function template(tag, props, text) {
             }
         }
         if (text) {
-            element.textContent = text;
+            element.textContent = `${text}`;
         }
         return element;
     }
     return getElement();
 }
-const div = template('div', {});
-const h1 = template('h1', { class: 'title ddom', id: "title2" }, "Hello World from Direct DOM");
 const app = document.getElementById("root");
-div.appendChild(h1);
-function renderAppDDOM() {
-    app === null || app === void 0 ? void 0 : app.appendChild(div);
+function nest(parent, children) {
+    if (Array.isArray(children)) {
+        for (const child of children) {
+            parent === null || parent === void 0 ? void 0 : parent.appendChild(child);
+        }
+    }
+    else {
+        parent === null || parent === void 0 ? void 0 : parent.appendChild(children);
+    }
 }
-renderAppDDOM();
+function renderAppDDOM(containerElement) {
+    app && nest(app, containerElement);
+}

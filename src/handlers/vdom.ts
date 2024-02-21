@@ -4,10 +4,6 @@ interface VNode {
     children: VNode[] | string;
 }
 
-`<div id="my-id" class="my-class">
-    <h1>Hello World</h1>
-</div>`
-
 // takes 1 node ==> converts it to HTML
 function renderNode(vnode: VNode): HTMLElement {
     // create the HTML tag
@@ -43,13 +39,8 @@ function h(tag: string, props: Record<string, any>, children: VNode[] | string):
     }
 }
 
-function renderAppVDOM() {
-    const app = document.getElementById('root');
+function renderAppVDOM(fun: VNode) :void {
 
-    app?.appendChild(renderNode(
-        h('div', {id:'my-id'}, [
-        h('h1', {class:'title'}, 'Hello World')
-    ])));
+    app?.appendChild(renderNode(fun));
 }
 
-renderAppVDOM();

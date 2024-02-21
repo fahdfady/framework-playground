@@ -1,7 +1,4 @@
 "use strict";
-`<div id="my-id" class="my-class">
-    <h1>Hello World</h1>
-</div>`;
 function renderNode(vnode) {
     const el = document.createElement(vnode.tag);
     for (const [key, value] of Object.entries(vnode.props)) {
@@ -24,10 +21,6 @@ function h(tag, props, children) {
         children
     };
 }
-function renderAppVDOM() {
-    const app = document.getElementById('root');
-    app === null || app === void 0 ? void 0 : app.appendChild(renderNode(h('div', { id: 'my-id' }, [
-        h('h1', { class: 'title' }, 'Hello World')
-    ])));
+function renderAppVDOM(fun) {
+    app === null || app === void 0 ? void 0 : app.appendChild(renderNode(fun));
 }
-renderAppVDOM();
