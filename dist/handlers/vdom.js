@@ -9,7 +9,7 @@ function renderNode(vnode) {
     }
     else {
         for (const child of vnode.children) {
-            el.appendChild(renderNode(child));
+            nest(el, renderNode(child));
         }
     }
     return el;
@@ -21,6 +21,6 @@ function h(tag, props, children) {
         children
     };
 }
-function renderAppVDOM(fun) {
-    app === null || app === void 0 ? void 0 : app.appendChild(renderNode(fun));
+function renderAppVDOM(fn) {
+    app === null || app === void 0 ? void 0 : app.appendChild(renderNode(fn));
 }

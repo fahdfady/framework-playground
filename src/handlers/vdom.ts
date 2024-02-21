@@ -22,7 +22,7 @@ function renderNode(vnode: VNode): HTMLElement {
     // else (the children is an array of VNodes) ==> iterate on each VNode and recursivley render them until we finish them and their nested children
     else {
         for (const child of vnode.children) {
-            el.appendChild(renderNode(child));
+            nest(el, renderNode(child))
         }
     }
 
@@ -39,8 +39,6 @@ function h(tag: string, props: Record<string, any>, children: VNode[] | string):
     }
 }
 
-function renderAppVDOM(fun: VNode) :void {
-
-    app?.appendChild(renderNode(fun));
+function renderAppVDOM(fn: VNode): void {
+    app?.appendChild(renderNode(fn));
 }
-

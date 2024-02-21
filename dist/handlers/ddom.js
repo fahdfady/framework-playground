@@ -22,16 +22,6 @@ function template(tag, props, text) {
     return getElement();
 }
 const app = document.getElementById("root");
-function nest(parent, children) {
-    if (Array.isArray(children)) {
-        for (const child of children) {
-            parent === null || parent === void 0 ? void 0 : parent.appendChild(child);
-        }
-    }
-    else {
-        parent === null || parent === void 0 ? void 0 : parent.appendChild(children);
-    }
-}
 function renderAppDDOM(containerElement) {
     app && nest(app, containerElement);
 }
