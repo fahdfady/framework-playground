@@ -21,24 +21,18 @@ function renderNode(vnode) {
     }
     return el;
 }
-var appNode = {
-    tag: 'div',
-    props: {
-        id: "my-div",
-        class: "start",
-    },
-    children: [
-        {
-            tag: 'h1',
-            props: {
-                class: "title"
-            },
-            children: "Hello World"
-        }
-    ]
-};
+// hypescript render pattern https://www.patterns.dev/vue/render-functions/#:~:text=h%20is%20short%20for%20hyperscript,subsequently%20render%20on%20the%20page.     takes the vnode and return a vnode
+function h(tag, props, children) {
+    return {
+        tag: tag,
+        props: props,
+        children: children
+    };
+}
 function renderApp() {
     var app = document.getElementById('root');
-    app === null || app === void 0 ? void 0 : app.appendChild(renderNode(appNode));
+    app === null || app === void 0 ? void 0 : app.appendChild(renderNode(h('div', { id: 'my-id' }, [
+        h('h1', { class: 'title' }, 'Hello World')
+    ])));
 }
 renderApp();
