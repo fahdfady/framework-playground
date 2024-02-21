@@ -43,7 +43,7 @@ function h(tag: string, props: Record<string, any>, children: VNode[] | string):
     }
 }
 
-function renderApp() {
+function renderAppVDOM() {
     const app = document.getElementById('root');
 
     app?.appendChild(renderNode(
@@ -52,4 +52,4 @@ function renderApp() {
     ])));
 }
 
-renderApp();
+renderAppVDOM();
