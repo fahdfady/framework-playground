@@ -1,9 +1,13 @@
 "use strict";
+var activeEffect = null;
 function createSignal(value) {
     const target = { value };
+    const effects = [];
     const proxy = new Proxy(target, {
         get(target, prop) {
-            console.log('get', target, prop);
+            if (activeEffect) {
+                effects.push(activeEffect);
+            }
             if (prop === "value") {
                 return target[prop];
             }
@@ -12,6 +16,7 @@ function createSignal(value) {
             if (prop === "value") {
                 target[prop] = value;
             }
+            effects.forEach(effect => effect());
             return true;
         }
     });
@@ -19,7 +24,9 @@ function createSignal(value) {
 }
 let count = createSignal(0);
 function createEffect(fn) {
+    activeEffect = fn;
     fn();
+    activeEffect = null;
 }
 function renderApp() {
     const html = `<h1>${count.value}</h1>`;
