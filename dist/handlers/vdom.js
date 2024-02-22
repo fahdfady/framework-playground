@@ -22,5 +22,5 @@ function h(tag, props, children) {
     };
 }
 function renderAppVDOM(fn) {
-    app === null || app === void 0 ? void 0 : app.appendChild(renderNode(fn));
+    app && nest(app, renderNode(fn));
 }

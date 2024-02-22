@@ -1,22 +1,25 @@
 "use strict";
-var activeEffect = null;
-function createSignal(value, options) {
+let activeEffect = null;
+function createSignal(value) {
+    const listeners = new Set();
     const target = { value };
-    const effects = [];
     const proxy = new Proxy(target, {
         get(target, prop) {
             if (activeEffect) {
-                effects.push(activeEffect);
+                listeners.add(activeEffect);
             }
+            ;
             if (prop === "value") {
                 return target[prop];
             }
         },
-        set(target, prop, value) {
-            if (prop === "value") {
-                target[prop] = value;
+        set(target, prop, newValue) {
+            if (prop !== newValue) {
+                target.value = newValue;
             }
-            effects.forEach(effect => effect());
+            for (const effect of listeners) {
+                effect();
+            }
             return true;
         }
     });
@@ -24,20 +27,8 @@ function createSignal(value, options) {
     const setter = (newValue) => proxy.value = newValue;
     return [getter, setter];
 }
-const [count, setCount] = createSignal(0);
-function createEffect(fn) {
-    activeEffect = fn;
-    fn();
+function createEffect(effect) {
+    activeEffect = effect;
+    effect();
     activeEffect = null;
 }
-function renderApp() {
-    const html = `<h1>${count()}</h1>`;
-    if (app) {
-        app.innerHTML = html;
-    }
-}
-function increment() {
-    setCount(count() + 1);
-}
-window.increment = increment;
-createEffect(renderApp);

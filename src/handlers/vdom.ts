@@ -40,5 +40,5 @@ function h(tag: string, props: Record<string, any>, children: VNode[] | string):
 }
 
 function renderAppVDOM(fn: VNode): void {
-    app?.appendChild(renderNode(fn));
+    app && nest(app, renderNode(fn));
 }
