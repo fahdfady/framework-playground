@@ -1,7 +1,7 @@
 var activeEffect: null | (() => void) = null
 
 // intercepts the count = count + 1 proceess 
-function createSignal<T>(value: T) {
+function createSignal<T>(value: T, options?: T) {
     // putting our value in an object so we can use it in proxy
     const target = { value };
 
@@ -25,18 +25,24 @@ function createSignal<T>(value: T) {
                 target[prop] = value;
             }
 
-            // console.log(effects)
             effects.forEach(effect => effect());
 
-            return true
+            return true;
         }
     })
 
 
-    return proxy;
+
+    // implementing getter and setter {https://docs.solidjs.com/reference/basic-reactivity/create-signal}
+    // the getter: a function returning the current value (and not the value itself. because it needs to read the last value to update it)
+    const getter = () => proxy.value;
+    // the setter: a function that changes the value
+    const setter = (newValue: T) => proxy.value = newValue;
+
+    return [getter, setter] as const;
 }
 
-let count = createSignal(0);
+const [count, setCount] = createSignal(0);
 
 function createEffect(fn: () => void) {
     activeEffect = fn;
@@ -45,7 +51,7 @@ function createEffect(fn: () => void) {
 }
 
 function renderApp() {
-    const html = `<h1>${count.value}</h1>`
+    const html = `<h1>${count()}</h1>`
 
     if (app) {
         app.innerHTML = html;
@@ -53,7 +59,7 @@ function renderApp() {
 }
 
 function increment() {
-    count.value++;
+    setCount(count() + 1);
 }
 
 

@@ -1,6 +1,6 @@
 "use strict";
 var activeEffect = null;
-function createSignal(value) {
+function createSignal(value, options) {
     const target = { value };
     const effects = [];
     const proxy = new Proxy(target, {
@@ -20,22 +20,24 @@ function createSignal(value) {
             return true;
         }
     });
-    return proxy;
+    const getter = () => proxy.value;
+    const setter = (newValue) => proxy.value = newValue;
+    return [getter, setter];
 }
-let count = createSignal(0);
+const [count, setCount] = createSignal(0);
 function createEffect(fn) {
     activeEffect = fn;
     fn();
     activeEffect = null;
 }
 function renderApp() {
-    const html = `<h1>${count.value}</h1>`;
+    const html = `<h1>${count()}</h1>`;
     if (app) {
         app.innerHTML = html;
     }
 }
 function increment() {
-    count.value++;
+    setCount(count() + 1);
 }
 window.increment = increment;
 createEffect(renderApp);
