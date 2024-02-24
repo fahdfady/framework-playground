@@ -17,7 +17,7 @@ function createSignal<T>(value: T) {
                 return target[prop];
             }
         },
-        set(target, prop, newValue:T) {
+        set(target, prop, newValue: T) {
             if (prop !== newValue) {
                 target.value = newValue;
             }
@@ -37,11 +37,25 @@ function createSignal<T>(value: T) {
     const setter = (newValue: any) => proxy.value = newValue;
 
     return [getter, setter] as const;
+    // vue returns proxy, so, you can use mutable APIs  
 }
+// // you're forced to use immutable API e.g. 
+// // DON't
+// const [getObj, setObj] = createSignal({ name: "Abdelrahman", age: 20 });
+
+// setObj({ age: 12 });
+// console.log(getObj())
+
+// // DO
+// const [getObj2, setObj2] = createSignal({ name: "Abdelrahman", age: 20 });
+// setObj2({ ...getObj2(), age: 12 })
+// console.log(getObj2())
+// //  mutable API e.g. (dont do, only in vue)
+// obj.value={name:"Kareem"}
+
 
 function createEffect(effect: (() => void)) {
     activeEffect = effect;
     effect(); // run the effect
     activeEffect = null;
 }
-

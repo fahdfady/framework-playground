@@ -11,18 +11,15 @@ const h1 = template('h1', { class: 'title ddom', id: "title2" }, "Hello World fr
 const p = template('p', { id: "my-p" }, 'just testing if i can nest multiple elements under one parent')
 const p2 = template('p', { id: "my-p2" }, 'just testing if i can nest multiple elements under two parents')
 
-const [count, setCount] = createSignal(0);
-const countElement = template('h1', { style: 'margin:0; margin-top:20px;' }, count().toString());
-const increaseBtn = template('button', { style: "my-p2", onclick: "setCount(count() + 1)" }, 'increase number')
-
-// Create a count element using your template function
-
-// Append the count element to your app
+const [getCount, setCount] = createSignal(0);
+const countElement = template('h1', { style: 'margin:0; margin-top:20px;' }, getCount().toString());
+const increaseBtn = template('button', { style: "my-p2", onclick: "setCount(getCount() + 1)" }, 'increase number')
 
 // Create an effect that updates the count element whenever the count changes
 createEffect(() => {
-    countElement.textContent = count().toString();
+    countElement.textContent = getCount().toString();
 });
+
 
 nest(div,
     [h1, p,
@@ -35,5 +32,3 @@ nest(div,
 
     ]);
 renderAppDDOM(div);
-
-
