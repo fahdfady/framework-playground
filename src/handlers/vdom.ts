@@ -1,3 +1,5 @@
+import { nest } from "./nest";
+
 interface VNode {
     tag: string;
     props: Record<string, any>;
@@ -31,7 +33,7 @@ function renderNode(vnode: VNode): HTMLElement {
 
 
 // hypescript render pattern https://www.patterns.dev/vue/render-functions/#:~:text=h%20is%20short%20for%20hyperscript,subsequently%20render%20on%20the%20page.     takes the vnode and return a vnode
-function h(tag: string, props: Record<string, any>, children: VNode[] | string): VNode {
+export function h(tag: string, props: Record<string, any>, children: VNode[] | string): VNode {
     return {
         tag,
         props,
@@ -39,6 +41,6 @@ function h(tag: string, props: Record<string, any>, children: VNode[] | string):
     }
 }
 
-function renderAppVDOM(fn: VNode): void {
+export function renderAppVDOM(app: HTMLElement, fn: VNode): void {
     app && nest(app, renderNode(fn));
 }

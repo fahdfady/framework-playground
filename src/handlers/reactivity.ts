@@ -1,7 +1,7 @@
 let activeEffect: (() => void) | null = null;
 
-// intercepts the change process
-function createSignal<T>(value: T) {
+// A singal that intercepts the change process
+export function createSignal<T>(value: T) {
     const listeners: Set<() => void> = new Set();
 
     // putting our value in an object so we can use it in proxy
@@ -33,8 +33,8 @@ function createSignal<T>(value: T) {
     // implementing getter and setter {https://docs.solidjs.com/reference/basic-reactivity/create-signal}
     // the getter: a function returning the current value (and not the value itself. because it needs to read the last value to update it)
     const getter = () => proxy.value;
-    // the setter: a function that changes the value
-    const setter = (newValue: any) => proxy.value = newValue;
+    // the setter: a function that changes the value (it is a function that takes the same type of the value)
+    const setter = (newValue: T) => proxy.value = newValue;
 
     return [getter, setter] as const;
     // vue returns proxy, so, you can use mutable APIs  
@@ -54,7 +54,7 @@ function createSignal<T>(value: T) {
 // obj.value={name:"Kareem"}
 
 
-function createEffect(effect: (() => void)) {
+export function createEffect(effect: (() => void)) {
     activeEffect = effect;
     effect(); // run the effect
     activeEffect = null;

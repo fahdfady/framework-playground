@@ -1,4 +1,6 @@
-function template(tag: string, props?: Record<string, string | Function>, text?: string): HTMLElement {
+import { nest } from "./nest";
+
+export function template(tag: string, props?: Record<string, string | Function>, text?: string): HTMLElement {
     let element: HTMLElement;
 
     function getElement() {
@@ -30,8 +32,7 @@ function template(tag: string, props?: Record<string, string | Function>, text?:
     return getElement();
 }
 
-const app = document.getElementById("root");
 
-function renderAppDDOM(containerElement: HTMLElement): void {
+export function renderAppDDOM(app: HTMLElement, containerElement: HTMLElement): void {
     app && nest(app, containerElement)
 } 

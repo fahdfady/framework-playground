@@ -1,5 +1,11 @@
+import { renderAppDDOM, template } from "./handlers/ddom";
+import { nest } from "./handlers/nest";
+import { createEffect, createSignal } from "./handlers/reactivity";
+import { h, renderAppVDOM } from "./handlers/vdom";
+const app = <HTMLElement>document.getElementById("root");
+
 // using virtual dom
-renderAppVDOM(
+renderAppVDOM(app,
     h('div', { id: 'my-id' }, [
         h('h1', { class: 'title' }, 'Hello World'),
         h('p', {}, "lorem ipsum dolor"),
@@ -12,6 +18,8 @@ const p = template('p', { id: "my-p" }, 'just testing if i can nest multiple ele
 const p2 = template('p', { id: "my-p2" }, 'just testing if i can nest multiple elements under two parents')
 
 const [getCount, setCount] = createSignal(0);
+// setCount("some string"); type error
+
 const countElement = template('h1', { style: 'margin:0; margin-top:20px;' }, getCount().toString());
 const increaseBtn = template('button', { style: "my-p2", onclick: "setCount(getCount() + 1)" }, 'increase number')
 
@@ -31,4 +39,4 @@ nest(div,
         // template('h1', { id: "counter" }, count().toString())
 
     ]);
-renderAppDDOM(div);
+renderAppDDOM(app, div);

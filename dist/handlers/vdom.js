@@ -1,4 +1,7 @@
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.renderAppVDOM = exports.h = void 0;
+const nest_1 = require("./nest");
 function renderNode(vnode) {
     const el = document.createElement(vnode.tag);
     for (const [key, value] of Object.entries(vnode.props)) {
@@ -9,7 +12,7 @@ function renderNode(vnode) {
     }
     else {
         for (const child of vnode.children) {
-            nest(el, renderNode(child));
+            (0, nest_1.nest)(el, renderNode(child));
         }
     }
     return el;
@@ -21,6 +24,8 @@ function h(tag, props, children) {
         children
     };
 }
-function renderAppVDOM(fn) {
-    app && nest(app, renderNode(fn));
+exports.h = h;
+function renderAppVDOM(app, fn) {
+    app && (0, nest_1.nest)(app, renderNode(fn));
 }
+exports.renderAppVDOM = renderAppVDOM;
