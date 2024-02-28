@@ -1,7 +1,4 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.nest = void 0;
-function nest(parent, children) {
+export function nest(parent, children) {
     if (Array.isArray(children)) {
         for (const child of children) {
             if (Array.isArray(child)) {
@@ -19,4 +16,3 @@ function nest(parent, children) {
     }
     return parent;
 }
-exports.nest = nest;

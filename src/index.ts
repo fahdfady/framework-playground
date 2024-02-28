@@ -1,7 +1,8 @@
-import { renderAppDDOM, template } from "./handlers/ddom";
-import { nest } from "./handlers/nest";
-import { createEffect, createSignal } from "./handlers/reactivity";
-import { h, renderAppVDOM } from "./handlers/vdom";
+import { renderAppDDOM, template } from "./handlers/ddom.js";
+import { nest } from "./handlers/nest.js";
+import { createEffect, createSignal } from "./handlers/reactivity.js";
+import { h, renderAppVDOM } from "./handlers/vdom.js";
+
 const app = <HTMLElement>document.getElementById("root");
 
 // using virtual dom
@@ -23,10 +24,10 @@ const [getCount, setCount] = createSignal(0);
 const countElement = template('h1', { style: 'margin:0; margin-top:20px;' }, getCount().toString());
 const increaseBtn = template('button', { style: "my-p2", onclick: "setCount(getCount() + 1)" }, 'increase number')
 
-// Create an effect that updates the count element whenever the count changes
-createEffect(() => {
-    countElement.textContent = getCount().toString();
-});
+// // Create an effect that updates the count element whenever the count changes
+// createEffect(() => {
+//     countElement.textContent = getCount().toString();
+// });
 
 
 nest(div,

@@ -1,8 +1,5 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.createEffect = exports.createSignal = void 0;
 let activeEffect = null;
-function createSignal(value) {
+export function createSignal(value) {
     const listeners = new Set();
     const target = { value };
     const proxy = new Proxy(target, {
@@ -29,10 +26,8 @@ function createSignal(value) {
     const setter = (newValue) => proxy.value = newValue;
     return [getter, setter];
 }
-exports.createSignal = createSignal;
-function createEffect(effect) {
+export function createEffect(effect) {
     activeEffect = effect;
     effect();
     activeEffect = null;
 }
-exports.createEffect = createEffect;

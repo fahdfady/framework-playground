@@ -1,8 +1,5 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.renderAppDDOM = exports.template = void 0;
-const nest_1 = require("./nest");
-function template(tag, props, text) {
+import { nest } from "./nest.js";
+export function template(tag, props, text) {
     let element;
     function getElement() {
         if (!element) {
@@ -24,8 +21,6 @@ function template(tag, props, text) {
     }
     return getElement();
 }
-exports.template = template;
-function renderAppDDOM(app, containerElement) {
-    app && (0, nest_1.nest)(app, containerElement);
+export function renderAppDDOM(app, containerElement) {
+    app && nest(app, containerElement);
 }
-exports.renderAppDDOM = renderAppDDOM;

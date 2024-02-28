@@ -1,4 +1,4 @@
-import { nest } from "./nest";
+import { nest } from "./nest.js";
 
 interface VNode {
     tag: string;

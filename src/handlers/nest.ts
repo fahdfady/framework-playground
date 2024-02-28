@@ -1,5 +1,4 @@
 //nest maximum children is 2 nested element --- so if you want to nest again you have to call nest again in your nest function
-
 export function nest(parent: HTMLElement, children: any): HTMLElement {
     if (Array.isArray(children)) {
         for (const child of children) {
