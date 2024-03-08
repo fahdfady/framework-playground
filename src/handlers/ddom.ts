@@ -11,8 +11,9 @@ export function template(tag: string, props?: Record<string, string | Function>,
                 const propValue = props[propKey];
 
                 if (propKey.startsWith("on") && typeof propValue === "function") {
-                    //@ts-ignore
-                    element[propKey.toLowerCase()] = propValue;
+                    console.log("somoeone help me", propKey, propValue)
+                    // Set the event handler directly without a template literal
+                    element.addEventListener(propKey.substring(2), propValue as EventListener);
                 }
 
                 else {
@@ -33,6 +34,6 @@ export function template(tag: string, props?: Record<string, string | Function>,
 }
 
 
-export function renderAppDDOM(app: HTMLElement, containerElement: HTMLElement): void {
-    app && nest(app, containerElement)
-} 
+export function renderAppDDOM(root: HTMLElement, containerElement: HTMLElement): void {
+    root && nest(root, containerElement)
+}

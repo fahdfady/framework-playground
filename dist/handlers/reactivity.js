@@ -1,33 +1,45 @@
-let activeEffect = null;
+const context = [];
+function subscribe(running, subscribers) {
+    subscribers.add(running);
+    running.dependencies.add(subscribers);
+}
+function cleanup(running) {
+    for (const dep of running.dependencies) {
+        dep.delete(running);
+    }
+    running.dependencies.clear();
+}
 export function createSignal(value) {
-    const listeners = new Set();
-    const target = { value };
-    const proxy = new Proxy(target, {
-        get(target, prop) {
-            if (activeEffect) {
-                listeners.add(activeEffect);
-            }
-            ;
-            if (prop === "value") {
-                return target[prop];
-            }
-        },
-        set(target, prop, newValue) {
-            if (prop !== newValue) {
-                target.value = newValue;
-            }
-            for (const effect of listeners) {
-                effect();
-            }
-            return true;
+    const subscribers = new Set();
+    const getter = () => {
+        const running = context[context.length - 1];
+        if (running)
+            subscribe(running, subscribers);
+        return value;
+    };
+    const setter = (newValue) => {
+        value = newValue;
+        for (const sub of [...subscribers]) {
+            sub.execute();
         }
-    });
-    const getter = () => proxy.value;
-    const setter = (newValue) => proxy.value = newValue;
+    };
     return [getter, setter];
 }
-export function createEffect(effect) {
-    activeEffect = effect;
-    effect();
-    activeEffect = null;
+export function createEffect(fn) {
+    const execute = () => {
+        cleanup(running);
+        context.push(running);
+        try {
+            fn();
+        }
+        finally {
+            context.pop;
+        }
+    };
+    const running = {
+        execute,
+        dependencies: new Set()
+    };
+    execute();
+    console.log(running, context, execute);
 }

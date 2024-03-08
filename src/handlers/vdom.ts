@@ -1,6 +1,6 @@
 import { nest } from "./nest.js";
 
-interface VNode {
+type VNode = {
     tag: string;
     props: Record<string, any>;
     children: VNode[] | string;
