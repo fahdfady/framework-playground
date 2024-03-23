@@ -13,18 +13,28 @@
             .title.ddom {
                 color: firebrick;
             }
+
+            a {
+                color: #fff;
+            }
         </style>
     </head>
 
     <body style="background-color: #0a0a0a; color: #fff;">
+        <nav>
+            <a href="/" onclick="Route()">home</a>
+            <a href="/about" onclick="Route()">about</a>
+            <a href="/contact" onclick="Route()">contact</a>
+        </nav>
+
         <div id="root"></div>
     </body>
 
 
-    <script src="dist/handlers/reactivity.js" type="module"></script>
+    <script src="dist/handlers/routing.js"></script>
 
     <!-- the actual javascript that i want to run -->
-    <script src="dist/index.js" type="module"></script>
+    <!-- <script src="dist/index.js" type="module"></script> -->
 
     <noscript>please activate JavaScript in your broswer to see the page content</noscript>
 

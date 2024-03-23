@@ -4,4 +4,7 @@ declare global {
         execute: () => void;
         dependencies: Set<Set<() => void>>;
     }
+    interface Window {
+        route: (e: any) => void;
+    }
 }

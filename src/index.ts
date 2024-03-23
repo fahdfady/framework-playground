@@ -2,7 +2,6 @@ import { renderAppDDOM, template } from "./handlers/ddom.js";
 import { nest } from "./handlers/nest.js";
 import { createEffect, createSignal } from "./handlers/reactivity.js";
 import { h, renderAppVDOM } from "./handlers/vdom.js";
-
 const app = <HTMLElement>document.getElementById("root");
 
 // using virtual dom
@@ -26,7 +25,6 @@ const th = template('th', {}, '')
 const [getCount, setCount] = createSignal(0);
 const countElement = template('h1', { style: 'margin:0; margin-top:20px;' }, getCount().toString());
 const increment = () => {
-    // @ts-ignore
     setCount(getCount() + 1);
     console.log(getCount());
     console.log("hello world!");
@@ -49,4 +47,5 @@ nest(div,
         countElement,
         increaseBtn
     ]);
+
 renderAppDDOM(app, div);
