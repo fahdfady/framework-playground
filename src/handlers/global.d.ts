@@ -7,4 +7,6 @@ declare global {
     interface Window {
         route: (e: any) => void;
     }
+const root = <HTMLElement>document.getElementById("root");
+
 }

@@ -1,39 +1,44 @@
-"use strict";
-const Route = (e) => {
-    e = e || window.event;
-    e.preventDefault();
-    window.history.pushState({}, '', e.target.href);
-    handleLocation();
-};
-const routes = {
-    '/404': '404.html',
-    '/': 'index.html',
-    '/about': 'about.html',
-    '/contact': 'contact.html'
-};
-const root = document.getElementById('root');
-const handleLocation = async () => {
-    var _a;
-    const path = (_a = window.location) === null || _a === void 0 ? void 0 : _a.pathname;
-    if (!path) {
-        console.error("No path found");
-        return;
+class Router {
+    constructor() {
+        this.routes = {};
+        this.currentPath = window.location.pathname;
+        this.previousPath = null;
+        const handlePopstate = this.handlePopstate.bind(this);
+        const handleClick = this.handleClick.bind(this);
+        window.addEventListener('popstate', handlePopstate);
+        window.addEventListener('click', handleClick);
     }
-    const route = `/pages/${routes[path]}` || routes['404'];
-    let html;
-    try {
-        html = await fetch(route).then((data) => data.text());
+    on(path, callback) {
+        this.routes[path] = callback;
     }
-    catch (error) {
-        console.error(`Error fetching route ${route}`, error);
-        return;
+    navigateTo(path) {
+        history.pushState({}, '', path);
+        this.handleRoute();
     }
-    if (!root) {
-        console.error("No root element found");
-        return;
+    handlePopstate() {
+        this.handleRoute();
     }
-    root.innerHTML = html;
-};
-window.onpopstate = handleLocation;
-window.route = Route;
-handleLocation();
+    handleClick(e) {
+        if (e.target instanceof HTMLAnchorElement && e.target.href) {
+            e.preventDefault();
+            this.navigateTo(e.target.href);
+        }
+    }
+    handleRoute() {
+        const currentPath = window.location.pathname;
+        if (this.currentPath === currentPath) {
+            return;
+        }
+        this.previousPath = this.currentPath;
+        this.currentPath = currentPath;
+        const callback = this.routes[currentPath];
+        if (callback) {
+            callback();
+        }
+        else {
+            console.log("404: ", currentPath);
+        }
+    }
+}
+const router = new Router();
+export default router;

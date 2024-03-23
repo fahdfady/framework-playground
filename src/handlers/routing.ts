@@ -1,74 +1,126 @@
-/**
- * Handle the route for the anchor element
- *
- * @param e The event object that was triggered
- */
-const Route = (e: any) => {
-    // get the event object from the window if there isn't one
-    e = e || window.event;
+type RouteCallback = () => void;
 
-    // prevent the default behavior of the anchor element (navigation)
-    e.preventDefault();
+class Router<T extends string> {
+    /**
+     * Class to handle routing
+     * 
+     * @constructor
+     */
+    private routes: { [key: string]: RouteCallback };
+    private currentPath: string;
+    private previousPath: string | null;
+    constructor() {
+        /**
+         * Stores all registered routes
+         */
+        this.routes = {}
 
-    // updates the URL on the browser
-    // pushState: adds/updates a history entry, and navigates to it
-    // the first param is the data object, which we don't really care about
-    // the second param is the title
-    // the third param is the URL
-    window.history.pushState({}, '', e.target.href);
+        /**
+         * Current URL pathname
+         */
+        this.currentPath = window.location.pathname;
 
-    handleLocation();
+        /**
+         * Previous URL pathname
+         */
+        this.previousPath = null;
+
+        /**
+         * Event listener for the popstate event
+         */
+        const handlePopstate = this.handlePopstate.bind(this);
+        /**
+         * Event listener for the click event
+         */
+        const handleClick = this.handleClick.bind(this);
+
+        /**
+         * Add popstate event listener to the window
+         */
+        window.addEventListener('popstate', handlePopstate);
+        /**
+         * Add click event listener to the window
+         */
+        window.addEventListener('click', handleClick);
+    }
+
+    on(path: T, callback: RouteCallback) {
+        this.routes[path] = callback;
+    }
+
+    navigateTo(path: T): void {
+        history.pushState({}, '', path);
+        this.handleRoute();
+    }
+
+    handlePopstate() {
+        this.handleRoute();
+    }
+
+
+    /**
+     * Handles the click event and prevents default behavior for anchor elements.
+     *
+     * @param {MouseEvent} e - The click event
+     * @return {void} 
+     */
+    handleClick(e: MouseEvent): void {
+        // if the target is an anchor element -- and--  it has a href attribute, prevent default behavior and navigate to the href
+        if (e.target instanceof HTMLAnchorElement && e.target.href) {
+            e.preventDefault();
+            this.navigateTo(e.target.href as T);
+        }
+    }
+
+    /**
+     * Handles the route change.
+     *
+     * If the route exists in the registered routes, it calls the callback function.
+     * Otherwise it logs a 404 error message to the console.
+     */
+    handleRoute() {
+        const currentPath = window.location.pathname as T;
+
+        // If the current path is the same as the previous one, do nothing
+        if (this.currentPath === currentPath) {
+            return;
+        }
+
+        // Update the previous and current path
+        this.previousPath = this.currentPath;
+        this.currentPath = currentPath;
+
+        // Get the callback function for the current path
+        const callback = this.routes[currentPath];
+
+        // If the route exists, call its callback function
+        if (callback) {
+            callback();
+        } else {
+            // Otherwise log a 404 error
+            console.log("404: ", currentPath);
+        }
+    }
+
 }
 
 
-const routes: Record<string, string> = {
-    '/404': '404.html',
-    '/': 'index.html',
-    '/about': 'about.html',
-    '/contact': 'contact.html'
-}
+const router = new Router();
 
-const root = document.getElementById('root');
-/**
- * Handle the location event and fetch the appropriate HTML file based on
- * the URL path.
- */
-const handleLocation = async () => {
-    // get the current URL path from the window object
-    const path = window.location?.pathname;
+// router.on('/', () => {
+//     console.log('Home Page');
+// });
 
-    // if there is no path, log an error and exit
-    if (!path) {
-        console.error("No path found");
-        return;
-    }
+// router.on('/about', () => {
+//     console.log('About Page');
+// });
 
-    // look up the route for the URL path in the routes object, if it's not found in the routes object, return the 404 page
-    const route = `/pages/${routes[path]}` || routes['404'];
-    // fetch the HTML file for the route
-    let html;
-    try {
-        html = await fetch(route).then((data) => data.text());
-    } catch (error) {
-        // log an error if the fetch fails and exit
-        console.error(`Error fetching route ${route}`, error);
-        return;
-    }
+// router.on('/contact', () => {
+//     console.log('Contact Page');
+// });
 
-    // if there is no root element, log an error and exit
-    if (!root) {
-        console.error("No root element found");
-        return;
-    }
+// router.on('*', () => {
+//     console.log('404 Page');
+// });
 
-    // set the innerHTML of the root element to the HTML fetched from
-    // the route
-    root.innerHTML = html;
-};
-
-// handle if user clicks the back and forward buttons repeatly
-window.onpopstate = handleLocation;
-
-window.route = Route;
-
-handleLocation();
+export default router
