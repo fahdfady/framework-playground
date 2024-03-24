@@ -4,7 +4,7 @@ import HomePage from "./pages/index.js";
 import AboutPage from "./pages/about.js";
 import NotFound from "./pages/notFound.js";
 
-
+HomePage()
 router.on('/',
     HomePage)
 

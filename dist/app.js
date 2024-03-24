@@ -1,6 +1,7 @@
 import router from "./handlers/routing.js";
 import HomePage from "./pages/index.js";
 import AboutPage from "./pages/about.js";
+HomePage();
 router.on('/', HomePage);
 router.on('/about', AboutPage);
 router.on('*', () => {

@@ -2,7 +2,7 @@ import NotFound from "../pages/notFound.js";
 
 type RouteCallback = () => void;
 
-class Router<T extends string> {
+class Router {
     /**
      * Class to handle routing
      * 
@@ -46,11 +46,11 @@ class Router<T extends string> {
         window.addEventListener('click', handleClick);
     }
 
-    on(path: T, callback: RouteCallback) {
+    on(path: string, callback: RouteCallback) {
         this.routes[path] = callback;
     }
 
-    navigateTo(path: T): void {
+    navigateTo(path: string): void {
         history.pushState({}, '', path);
         this.handleRoute();
     }
@@ -70,7 +70,7 @@ class Router<T extends string> {
         // if the target is an anchor element -- and--  it has a href attribute, prevent default behavior and navigate to the href
         if (e.target instanceof HTMLAnchorElement && e.target.href) {
             e.preventDefault();
-            this.navigateTo(e.target.href as T);
+            this.navigateTo(e.target.href as string);
         }
     }
 
@@ -81,7 +81,7 @@ class Router<T extends string> {
      * Otherwise it logs a 404 error message to the console.
      */
     handleRoute() {
-        const currentPath = window.location.pathname as T;
+        const currentPath = window.location.pathname as string;
 
         // If the current path is the same as the previous one, do nothing
         if (this.currentPath === currentPath) {

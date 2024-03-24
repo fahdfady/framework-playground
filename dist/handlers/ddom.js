@@ -24,10 +24,33 @@ export function template(tag, props, text) {
 export function renderAppDDOM(root, containerElement) {
     let elements;
     if (Array.isArray(containerElement)) {
-        elements = containerElement.map(child => child.outerHTML);
+        elements = containerElement;
     }
     else {
-        elements = [containerElement.outerHTML];
+        elements = [containerElement];
     }
-    root.innerHTML = elements.join('');
+    const eventListenersMap = new Map();
+    elements.forEach(element => {
+        const eventListeners = new Map();
+        element.getAttributeNames().forEach(attr => {
+            if (attr.startsWith('on')) {
+                const eventName = attr.slice(2);
+                const eventListener = element.getAttribute(attr);
+                if (eventName && eventListener) {
+                    eventListeners.set(eventName, new Function(eventListener));
+                    element.removeAttribute(attr);
+                }
+            }
+        });
+        eventListenersMap.set(element, eventListeners);
+    });
+    root.innerHTML = '';
+    elements.forEach(element => {
+        root.appendChild(element);
+    });
+    eventListenersMap.forEach((eventListeners, element) => {
+        eventListeners.forEach((listener, eventName) => {
+            element.addEventListener(eventName, listener);
+        });
+    });
 }

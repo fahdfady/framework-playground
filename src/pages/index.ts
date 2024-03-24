@@ -28,7 +28,7 @@ export default function HomePage() {
         console.log(getCount());
         console.log("hello world!");
     };
-    const increaseBtn = template('button', { style: "my-p2", onclick: increment }, 'increase number')
+    const increaseBtn = template('button', { onclick: increment }, 'increase number')
 
     // Create an effect that updates the count element whenever the count changes
     createEffect(() => {

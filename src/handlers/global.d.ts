@@ -4,9 +4,6 @@ declare global {
         execute: () => void;
         dependencies: Set<Set<() => void>>;
     }
-    interface Window {
-        route: (e: any) => void;
-    }
-const root = <HTMLElement>document.getElementById("root");
+    const root = <HTMLElement>document.getElementById("root");
 
 }
