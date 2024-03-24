@@ -1,4 +1,3 @@
-import { nest } from "./nest.js";
 export function template(tag, props, text) {
     let element;
     function getElement() {
@@ -23,5 +22,12 @@ export function template(tag, props, text) {
     return getElement();
 }
 export function renderAppDDOM(root, containerElement) {
-    root && nest(root, containerElement);
+    let elements;
+    if (Array.isArray(containerElement)) {
+        elements = containerElement.map(child => child.outerHTML);
+    }
+    else {
+        elements = [containerElement.outerHTML];
+    }
+    root.innerHTML = elements.join('');
 }

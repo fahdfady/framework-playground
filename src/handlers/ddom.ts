@@ -34,6 +34,15 @@ export function template(tag: string, props?: Record<string, string | Function>,
 }
 
 
-export function renderAppDDOM(root: HTMLElement, containerElement: HTMLElement): void {
-    root && nest(root, containerElement)
+export function renderAppDDOM(root: HTMLElement, containerElement: HTMLElement | HTMLElement[]): void {
+    let elements: string[];
+
+    if (Array.isArray(containerElement)) {
+        elements = containerElement.map(child => child.outerHTML);
+    }
+    else {
+        elements = [containerElement.outerHTML];
+    }
+
+    root.innerHTML = elements.join('');
 }

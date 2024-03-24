@@ -1,3 +1,5 @@
+import NotFound from "../pages/notFound.js";
+
 type RouteCallback = () => void;
 
 class Router<T extends string> {
@@ -98,7 +100,9 @@ class Router<T extends string> {
             callback();
         } else {
             // Otherwise log a 404 error
-            console.log("404: ", currentPath);
+            console.error("404: ", currentPath);
+            if (NotFound) { NotFound(); }
+            else { return }
         }
     }
 

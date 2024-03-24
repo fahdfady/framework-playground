@@ -1,3 +1,4 @@
+import NotFound from "../pages/notFound.js";
 class Router {
     constructor() {
         this.routes = {};
@@ -36,7 +37,13 @@ class Router {
             callback();
         }
         else {
-            console.log("404: ", currentPath);
+            console.error("404: ", currentPath);
+            if (NotFound) {
+                NotFound();
+            }
+            else {
+                return;
+            }
         }
     }
 }
